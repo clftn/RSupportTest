@@ -10,6 +10,11 @@ using Photon.Pun;
 /// </summary>
 public class Player : PlayerBase, IPunObservable
 {
+    // 보간 처리용 변수들
+    public float TranValue = 10.0f;
+    public float RotValue = 10.0f;
+    public float ScaleValue = 10.0f;
+
     // 키보드 움직임 관련
     Vector3 DirVec;
     Vector3 CalcPos;
@@ -175,6 +180,12 @@ public class Player : PlayerBase, IPunObservable
             KeyBoardMove();
             JoyStickUpdate();
         } //if (pv.IsMine) 
+        else 
+        {
+            transform.position = Vector3.Lerp(transform.position, CalcPos, Time.deltaTime * TranValue);
+            transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, CalcRotate, Time.deltaTime * RotValue);
+            transform.localScale = Vector3.Lerp(transform.localScale, CalcScale, Time.deltaTime * ScaleValue);
+        }
     }
 
     void KeyBoardMove()
@@ -319,7 +330,19 @@ public class Player : PlayerBase, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-
+        // 로컬 플레이어의 위치 정보 송신
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.eulerAngles);
+            stream.SendNext(transform.localScale);            
+        }// 로컬 플레이어의 위치 정보 송신
+        else // 원격 플레이어의 위치 정보 수신
+        {
+            CalcPos = (Vector3)stream.ReceiveNext();
+            CalcRotate = (Vector3)stream.ReceiveNext();
+            CalcScale = (Vector3)stream.ReceiveNext();
+        }
     }
 
     #endregion

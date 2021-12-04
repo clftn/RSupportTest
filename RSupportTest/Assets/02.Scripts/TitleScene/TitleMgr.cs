@@ -20,7 +20,9 @@ public class TitleMgr : MonoBehaviourPunCallbacks
 
     // 룸 목록 갱신용 변수들
     public GameObject scrollContents;
-    public GameObject roomItem;    
+    public GameObject roomItem;
+    // 삭제되고 생기는 리스트를 만들어 저장한다. 포톤에서 List를 주긴 하는데 정확하지 않다.
+    List<RoomInfo> MyRoomList = new List<RoomInfo>(); 
     // 룸 목록 갱신용 변수들
 
     void Awake()
@@ -147,18 +149,18 @@ public class TitleMgr : MonoBehaviourPunCallbacks
     // 방 참가 여부 확인을 위한 노드들 업데이트 하는 부분
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        for (int i = 0; i < roomList.Count; i++)
+        foreach (var roomData in roomList)
         {
-            if (!roomList[i].RemovedFromList)
+            if (!roomData.RemovedFromList)
             {
-                if (!roomList.Contains(roomList[i])) roomList.Add(roomList[i]);
-                else roomList[roomList.IndexOf(roomList[i])] = roomList[i];
+                if (!MyRoomList.Contains(roomData)) MyRoomList.Add(roomData);
+                else MyRoomList[MyRoomList.IndexOf(roomData)] = roomData;
             }
-            else if (roomList.IndexOf(roomList[i]) != -1)
+            else if (MyRoomList.IndexOf(roomData) != -1)
             {
-                roomList.RemoveAt(roomList.IndexOf(roomList[i]));
+                MyRoomList.RemoveAt(MyRoomList.IndexOf(roomData));
             }
-        }
+        }//foreach (var roomData in roomList) 
 
         // 룸 목록을 다시 받았을 때 갱신하기 위해 기존에 생성된 RoomItem을 삭제
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("ROOM_ITEM"))
@@ -169,7 +171,7 @@ public class TitleMgr : MonoBehaviourPunCallbacks
         // 스크롤 영역 초기화
         scrollContents.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
 
-        foreach (var roomNode in roomList)
+        foreach (var roomNode in MyRoomList)
         {
             GameObject room = (GameObject)Instantiate(roomItem);
             room.transform.SetParent(scrollContents.transform, false);
@@ -179,11 +181,11 @@ public class TitleMgr : MonoBehaviourPunCallbacks
             roomData.roomName = roomNode.Name;
             roomData.connectPlayer = roomNode.PlayerCount;
             roomData.maxPlayer = roomNode.MaxPlayers;
-            
+
             // 텍스트 정보를 표시
             roomData.DisplayRoom(roomNode.IsOpen);
 
-        }
+        }        
     }//public override void OnRoomListUpdate(List<RoomInfo> roomList)
 
     // 방 참여를 위한 이벤트 연결 함수 다른 클래스에서 사용한다.

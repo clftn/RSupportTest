@@ -130,6 +130,9 @@ MonoBehaviour:
   RotateSpeed: 100
   MouseRotateSpeed: 500
   ScaleIncreSpeed: 10
+  TranValue: 10
+  RotValue: 10
+  ScaleValue: 10
 --- !u!114 &5185971623603616923
 MonoBehaviour:
   m_ObjectHideFlags: 0
