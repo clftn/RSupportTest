@@ -10,6 +10,9 @@ using Photon.Pun;
 /// </summary>
 public class Player : PlayerBase, IPunObservable
 {
+    // 플레이어 자체 UI
+    public Text IDText;
+
     // 보간 처리용 변수들
     public float TranValue = 10.0f;
     public float RotValue = 10.0f;
@@ -58,7 +61,7 @@ public class Player : PlayerBase, IPunObservable
         // 색상초기화도 같이 한다.
         if (pv.IsMine)
         {
-            Camera.main.GetComponent<FollowCam>().Target = this.gameObject;            
+            Camera.main.GetComponent<FollowCam>().Target = this.gameObject;          
         }
         else 
         {
@@ -68,6 +71,8 @@ public class Player : PlayerBase, IPunObservable
         CalcPos = transform.position;
         CalcRotate = transform.rotation.eulerAngles;
         CalcScale = transform.localScale;
+
+        IDText.text = pv.Owner.NickName;
     }
 
     // Start is called before the first frame update
@@ -328,6 +333,7 @@ public class Player : PlayerBase, IPunObservable
 
     #region 포톤 네트워크 관련 함수들
 
+    // 포톤 네트워크 위치 정보 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         // 로컬 플레이어의 위치 정보 송신

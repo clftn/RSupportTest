@@ -17,8 +17,6 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
-    PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -43,6 +41,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
     - UnityEngine.UI.Mask
+    - UnityEngine.UI.Outline
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
     - UnityEngine.UI.Shadow
@@ -219,6 +218,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13092}
     - Class: 114
       Script: {instanceID: 13390}
+    - Class: 114
+      Script: {instanceID: 13394}
     - Class: 114
       Script: {instanceID: 13476}
     - Class: 114
@@ -1042,7 +1043,7 @@ ScriptsOnlyBuild:
     className: PlayerUI
   - hash:
       serializedVersion: 2
-      Hash: 71d1a502cb6efd7bc61909277b90c8a7
+      Hash: 045a189fead3b0c541ba5f049857144d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
